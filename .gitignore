@@ -9,6 +9,7 @@ _site/
 
 ### my ###
 src/main/resources/static/site/flat-theme/images/
+src/main/resources/config/persistence_prod.properties
 src/main/java/com/mohsenj/config/PersistenceJPAConfigProduction.java
 
 target/

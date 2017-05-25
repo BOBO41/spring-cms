@@ -6,6 +6,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 import org.hibernate.jpa.HibernatePersistenceProvider;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -20,7 +21,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
 @EnableTransactionManagement
-@Profile("dev")
+@Profile({"dev", "prod"})
 public class PersistenceJPAConfig{
  
    @Bean
@@ -51,13 +52,28 @@ public class PersistenceJPAConfig{
 	    return em;
    }
  
+   @Value("${database.driverClassName}")
+   private String database_driverClassName;
+   
+   @Value("${database.url}")
+   private String database_url;
+   
+   @Value("${database.username}")
+   private String database_username;
+   
+   @Value("${database.password}")
+   private String database_password;
+   
+   @Value("${database.hibernate.hbm2ddl.auto}")
+   private String database_database_hibernate_hbm2ddl_auto;
+   
    @Bean
    public DataSource dataSource(){
       DriverManagerDataSource dataSource = new DriverManagerDataSource();
-      dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-      dataSource.setUrl("jdbc:mysql://localhost:3306/spring-cms-1?useUnicode=yes&characterEncoding=UTF-8");
-      dataSource.setUsername( "root" );
-      dataSource.setPassword( "" );
+      dataSource.setDriverClassName(database_driverClassName);
+      dataSource.setUrl(database_url);
+      dataSource.setUsername( database_username );
+      dataSource.setPassword( database_password );
       return dataSource;
    }
  
@@ -76,8 +92,8 @@ public class PersistenceJPAConfig{
  
    Properties additionalProperties() {
       Properties properties = new Properties();
-      properties.setProperty("hibernate.hbm2ddl.auto", "create-drop");
-  //    properties.setProperty("hibernate.hbm2ddl.auto", "update");
+   //   properties.setProperty("hibernate.hbm2ddl.auto", "create-drop");
+      properties.setProperty("hibernate.hbm2ddl.auto", database_database_hibernate_hbm2ddl_auto);
     //  properties.setProperty("hibernate.hbm2ddl.auto", "none");
       properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
       return properties;

@@ -3,10 +3,12 @@ package com.mohsenj.config;
 import java.nio.file.Paths;
 import java.util.Locale;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.format.FormatterRegistry;
@@ -23,7 +25,8 @@ import com.mohsenj.module.user.formatter.PermissionFormatter;
 import com.mohsenj.module.user.formatter.RoleFormatter;
 
 @Configuration
-@Profile("dev")
+/*@Profile("dev")*/
+@PropertySource({ "classpath:config/persistence_${spring.profiles.active}.properties", "classpath:config/mvcconfig_${spring.profiles.active}.properties" })
 public class MvcConfig extends WebMvcConfigurerAdapter {
    /*
 	@Override
@@ -34,6 +37,16 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
     }
 	*/
 	
+	@Value("${mvcconfig.cookieName}")
+	private String mvcconfig_cookieName;
+	
+	@Value("${mvcconfig.cookieMaxAge}")
+	private String mvcconfig_cookieMaxAge;
+	
+	@Value("${mvcconfig.fileDirectoryResourceLocations}")
+	private String mvcconfig_fileDirectoryResourceLocations;
+	
+
 	@Override
     public void addFormatters(FormatterRegistry formatterRegistry) {
         formatterRegistry.addFormatter(new PermissionFormatter());
@@ -52,8 +65,8 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
     public CookieLocaleResolver localeResolver(){
         CookieLocaleResolver localeResolver = new CookieLocaleResolver();
         localeResolver.setDefaultLocale(Locale.ENGLISH);
-        localeResolver.setCookieName("my-locale-cookie");
-        localeResolver.setCookieMaxAge(3600);
+        localeResolver.setCookieName(mvcconfig_cookieName);
+        localeResolver.setCookieMaxAge(Integer.parseInt(mvcconfig_cookieMaxAge));
         return localeResolver;
     }
 
@@ -79,7 +92,7 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/file/**")
-                .addResourceLocations("file:F:\\WEB\\xampp\\workspace-sts\\spring-cms-1\\file\\");
+                .addResourceLocations(mvcconfig_fileDirectoryResourceLocations);
     }
    
     /*
