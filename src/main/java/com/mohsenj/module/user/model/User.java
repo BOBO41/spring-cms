@@ -18,11 +18,22 @@ import javax.persistence.Transient;
 @Table(name = "user")
 public class User {
 	
+	public User() {
+        super();
+        this.enabled=false;
+    }
+	
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
     private Long id;
     
+	@Column(name = "enabled")
+    private Boolean enabled;
+	
+	@Column(name = "email")
+	private String email;
+	
     @Column(name = "username")
     private String username;
     
@@ -84,4 +95,23 @@ public class User {
     public Boolean hasRole(String role) {
     	return true;
     }
+
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	
+	
+    
 }

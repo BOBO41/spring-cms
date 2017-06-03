@@ -1,5 +1,5 @@
-INSERT IGNORE INTO user VALUES (1, '$2a$10$Z/ZmQPEtyWqrie0KGhfAM.h2.al2N0nks9Tz.tJYSbFTmhnrRm8b2', 'laklak20', 'mohsenkw');
-
+/*INSERT IGNORE INTO user VALUES (1, '$2a$10$Z/ZmQPEtyWqrie0KGhfAM.h2.al2N0nks9Tz.tJYSbFTmhnrRm8b2', '', 'mohsenkw', 'mohsen.jahan01@gmail.com', 1);
+*/
 INSERT IGNORE INTO module VALUES 
 (1, NULL, 'user', 1, 'user'), 
 (2, NULL, 'category', 1, 'category'), 

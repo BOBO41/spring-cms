@@ -20,5 +20,7 @@ public interface RoleRepository extends JpaRepository<Role, Integer>{
 	
 	@Query("SELECT p FROM Permission p where id=1")
 	Permission getTestPermission();
+
+	Role findByName(String name);
 }
 

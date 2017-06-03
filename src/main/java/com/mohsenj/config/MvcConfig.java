@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
@@ -25,6 +26,7 @@ import com.mohsenj.module.user.formatter.PermissionFormatter;
 import com.mohsenj.module.user.formatter.RoleFormatter;
 
 @Configuration
+@EnableAspectJAutoProxy(proxyTargetClass=true)
 /*@Profile("dev")*/
 @PropertySource({ "classpath:config/persistence_${spring.profiles.active}.properties", "classpath:config/mvcconfig_${spring.profiles.active}.properties" })
 public class MvcConfig extends WebMvcConfigurerAdapter {

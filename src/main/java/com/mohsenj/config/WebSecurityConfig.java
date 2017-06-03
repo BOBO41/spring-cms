@@ -1,5 +1,7 @@
 package com.mohsenj.config;
 
+import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,19 +13,29 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import com.mohsenj.module.user.service.MUserDetailsService;
+
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled=true)
 @Profile(value = {"dev", "prod"})
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    @Autowired
-    private UserDetailsService userDetailsService;
+    
+	@Autowired
+    private MUserDetailsService userDetailsService1;
 
-    @Bean
+/*	@Autowired
+    private UserDetailsService userDetailsService;
+	*/
+ /*   @Bean
     public UserDetailsService userDetailsService() {
-        return super.userDetailsService();
+       // return super.userDetailsService();
+    	return userDetailsService;
     }
+    */
+    
+    
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
@@ -32,7 +44,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-       .antMatchers("/admin/**").access("hasRole('ADMIN')")
+       .antMatchers("/admin/**").access("hasRole('super_admin')")
       //  .antMatchers("/db/**").access("hasRole('ADMIN') and hasRole('DBA')")
                     .antMatchers("/**",  "/resources/**", "/registration", "/welcome").permitAll()
                  //   .anyRequest().authenticated()
@@ -50,6 +62,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
+        auth.userDetailsService(userDetailsService1).passwordEncoder(bCryptPasswordEncoder());
     }
+    
+    /*
+    @Autowired
+	DataSource dataSource;
+    
+    @Autowired
+	public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
+
+	  auth.jdbcAuthentication().dataSource(dataSource)
+		.usersByUsernameQuery(
+			"select username,password, enabled from users where username=?")
+		.authoritiesByUsernameQuery(
+			"select username, role from user_roles where username=?");
+	}
+    */
 }
